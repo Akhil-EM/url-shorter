@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Shorty : simplest url shortener </title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  
+</head>
+<style>
+   .url-div{
+     cursor:pointer;
+   }
+
+   /* Popup container */
+  .popup {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+  }
+
+  /* The actual popup (appears on top) */
+  .popup .popuptext {
+    visibility: hidden;
+    width: 160px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -80px;
+  }
+
+  /* Popup arrow */
+  .popup .popuptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+  }
+
+  /* Toggle this class when clicking on the popup container (hide and show the popup) */
+  .popup .show {
+    visibility: visible;
+    -webkit-animation: fadeIn 1s;
+    animation: fadeIn 1s
+  }
+
+  /* Add animation (fade in the popup) */
+  @-webkit-keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
+  }
+
+  @keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity:1 ;}
+  }
+</style>
+<body>  
+<div class="container">
+  <div class="row">
+    <div class="col-sm-2"></div>
+    <div class="col-sm-8"> 
+        <h2 class="text-center" style="margin-top:30%;">Shorty</h2>
+        <h6 class="text-center">The simplest url shorter.</h6>
+        <form action="/" method="post" class="needs-validation mt-4" novalidate>
+          <div class="input-group w-100">
+            <input type="text" id="url" name="url" class="form-control" placeholder="Paste your amazing url....." required>
+            
+            <div class="input-group-prepend">
+              <button class="btn btn-outline-primary" id="btn-submit" type="submit">Shorten url</button>
+            </div>
+            <div class="invalid-feedback">
+              Oops thats not look like a url.!!
+             </div>
+             <div class="valid-feedback">
+              Thats look great :)
+             </div>
+          </div>
+        </form>
+        <% if(ShortedUrl){ %>
+          <div class="popup mt-3 url-div" onclick="copyToClipboardAndShowPopup()">
+            <p ><b>your amazing url has been created.click to copy  <span id="urlSpan"><%= ShortedUrl %></span></b></p>
+            <span class="popuptext" id="myPopup">copied to clipboard.</span>
+          </div>
+          
+        <% }  %>
+
+        <% if(error){ %>
+          <p class="mt-3 text-warning"><b><%= error %></b></p>
+        <% }  %>
+
+        <script>
+        // Example starter JavaScript for disabling form submissions if there are invalid fields
+        (function() {
+          'use strict';
+          window.addEventListener('load', function() {
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.getElementsByClassName('needs-validation');
+            // Loop over them and prevent submission
+            var validation = Array.prototype.filter.call(forms, function(form) {
+              form.addEventListener('submit', function(event) {
+               
+                const regex = /^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/gm;
+                let url = document.getElementById("url").value;
+                let testPassed = regex.test(url);
+                
+               
+        
+                if (form.checkValidity() === false){
+                  
+                  event.preventDefault();
+                  event.stopPropagation();
+                }
+               
+                form.classList.add('was-validated');
+              }, false);
+            });
+          }, false);
+
+        
+        })();
+        
+        function copyToClipboardAndShowPopup() {
+          var urlToCopy = $("#urlSpan").text();
+          navigator.clipboard.writeText(urlToCopy);
+          var popup = document.getElementById("myPopup");
+          popup.classList.toggle("show");
+        }
+        </script>
+    </div>
+    <div class="col-sm-2"></div>
+  </div>
+</div>
+<div>
+  <p class="text-center fixed-bottom" >made with 
+    <svg  xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
+      <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
+    </svg>
+    by 
+    <a href="https://github.com/Akhil-EM" style="text-decoration:none;">akhil</a>
+  </p>
+</div>
+</body>
+</html>
